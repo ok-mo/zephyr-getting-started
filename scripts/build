@@ -1,0 +1,39 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2022 Martin Schröder <info@swedishembedded.com>
+# Consulting: https://swedishembedded.com/go
+# Training: https://swedishembedded.com/tag/training
+
+ROOT="$(realpath $(dirname $BASH_SOURCE)/..)"
+
+set -e
+
+. ${ROOT}/VERSION
+. ${ROOT}/../zephyr/zephyr-env.sh
+west zephyr-export
+
+# Build applications and samples
+$ROOT/../zephyr/scripts/twister \
+	-p custom_board \
+	-c \
+	-O build-apps \
+	-v \
+	-i \
+	-A boards \
+	-T apps \
+	-T samples || {
+	echo "Error while trying to build project"
+	exit 1
+}
+
+# Build documentation
+${ROOT}/scripts/build-doc || {
+	echo "ERROR: documentation build failed. There are warnings."
+	exit 1
+}
+
+# Build releases
+${ROOT}/scripts/release -b custom_board -s apps/shell
+
+# Run post build checks
+robot post-build
