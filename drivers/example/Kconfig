@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache 2.0
+# Copyright 2022 Martin Schröder <info@swedishembedded.com>
+
+config EXAMPLE_DRIVER
+	bool "Example driver"
+	help
+		This is our example driver.
+
+config EXAMPLE_SENSOR
+	bool "Example sensor"
+	help
+		This is our example sensor.

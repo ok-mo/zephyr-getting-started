@@ -1,3 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2022 Martin Schröder <info@swedishembedded.com>
+# Consulting: https://swedishembedded.com/go
+# Training: https://swedishembedded.com/tag/training
+
+# store project base in current scope
+set(PROJECT_BASE ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "SDK base directory")
+# put it also in the env scope
+set(ENV{PROJECT_BASE} ${CMAKE_CURRENT_LIST_DIR})
+
+add_subdirectory(cmake)
+add_subdirectory(drivers)
+add_subdirectory(lib)
+add_subdirectory(testbench)
+
 # Add the main include directory to list of include paths
 zephyr_include_directories(include)
 
@@ -19,6 +34,10 @@ zephyr_compile_options("-Wuninitialized")
 # detects passing null arguments into functions that do not check for it
 zephyr_compile_options("-Wnonnull")
 
+# Disable old style declaration
+# Reason: zephyr pinctrl fails to compile
+#zephyr_compile_options("-Wno-old-style-declaration")
+
 # Disable unused parameter warning
 # Reason: zephyr pm functions fail to compile
 zephyr_compile_options("-Wno-unused-parameter")
@@ -30,6 +49,13 @@ zephyr_compile_options("-Wno-type-limits")
 # Disable error on comparison of integers of different signedness (zephyr)
 # Reason: zephyr os/cbprintf does not compile
 zephyr_compile_options("-Wno-sign-compare")
+
+# Disable qualifiers (zephyr net_if.h)
+zephyr_compile_options("-Wno-ignored-qualifiers")
+
+# Disable error on missing field initializers
+# Reason: sync_status in drivers/spi/spi_context.h
+zephyr_compile_options("-Wno-missing-field-initializers")
 
 # Disable error on checking non-literal format (zephyr)
 # Reason: zephyr drivers/serial/uart_native_posix.c does not compile

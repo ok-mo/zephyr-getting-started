@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2022 Martin Schröder <info@swedishembedded.com>
+# Consulting: https://swedishembedded.com/go
+# Training: https://swedishembedded.com/tag/training
+
+identifier: custom_board@1.0.0
+name: Custom Version ST Nucleo F401RE
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - arduino_gpio
+  - arduino_i2c
+  - arduino_spi
+  - pwm
+  - counter
+  - gpio
+  - i2c
+  - spi
+  - adc
+  - watchdog
+ram: 96
+flash: 512
